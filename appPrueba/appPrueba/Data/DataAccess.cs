@@ -16,11 +16,6 @@ namespace appPrueba.Data
         {
             var platform = DependencyService.Get<ISQLitePlatform>();
             db = platform.GetConnection();
-            db.CreateTable<Log>();
-            db.CreateTable<Client>();
-            db.CreateTable<Login>();
-            db.CreateTable<Notification>();
-            db.CreateTable<ControlNotification>();
         }
         public void Insert<T>(T model)
         {
