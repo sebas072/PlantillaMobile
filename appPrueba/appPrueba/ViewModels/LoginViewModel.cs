@@ -29,11 +29,11 @@ namespace appPrueba.ViewModels
             var result = await CrossFingerprint.Current.AuthenticateAsync("Tap that fingerprint sensor!");
             if (result.Authenticated)
             {
-                await Application.Current.MainPage.DisplayAlert("Results are here", "Valid fingerprint found", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Results are here", "correcto", "Ok");
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Results are here", "Invalid fingerprint", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Results are here", "Intente de nuevoo", "Ok");
             }
         }
 

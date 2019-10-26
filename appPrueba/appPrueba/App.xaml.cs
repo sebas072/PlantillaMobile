@@ -2,6 +2,7 @@
 using appPrueba.Services;
 using appPrueba.Views;
 using appPrueba.Models;
+using appPrueba.Views.HuellaDigital;
 
 namespace appPrueba
 {
@@ -13,7 +14,7 @@ namespace appPrueba
             InitializeComponent();
             isRemember();
             if (Remember)
-                MainPage = new MainPage();
+                MainPage = new LoginPage();
             else
                 MainPage = new LoginPage();
            
