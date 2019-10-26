@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.ObjectModel;
 using Xamarin.Forms;
 using System.Collections.Generic;
+using Plugin.Fingerprint;
 
 namespace appPrueba.ViewModels
 {
@@ -19,6 +20,7 @@ namespace appPrueba.ViewModels
             Title = "Historial";
             Items = new ObservableCollection<Log>();
             LoadLogs(cliet);
+            
         }
         private async void LoadLogs(Client c)
         {

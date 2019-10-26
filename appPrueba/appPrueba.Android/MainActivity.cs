@@ -6,6 +6,7 @@ using Android.OS;
 using Acr.UserDialogs;
 using Plugin.LocalNotifications;
 using Android.Content;
+using Plugin.Fingerprint;
 
 namespace appPrueba.Droid
 {
@@ -19,7 +20,7 @@ namespace appPrueba.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
-
+            CrossFingerprint.SetCurrentActivityResolver(() => this);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());

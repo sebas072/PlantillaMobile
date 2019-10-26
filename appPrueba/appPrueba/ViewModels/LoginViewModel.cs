@@ -1,6 +1,7 @@
 ﻿using appPrueba.Models;
 using appPrueba.Services;
 using appPrueba.Views;
+using Plugin.Fingerprint;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,22 @@ namespace appPrueba.ViewModels
             User = new Login();
             Title = "Iniciar sesión";
             LoginIn = new Command(async () => await ExecuteLoginInCommand());
+            LoadLogin();
         }
+
+        private async void LoadLogin()
+        {
+            var result = await CrossFingerprint.Current.AuthenticateAsync("Tap that fingerprint sensor!");
+            if (result.Authenticated)
+            {
+                await Application.Current.MainPage.DisplayAlert("Results are here", "Valid fingerprint found", "Ok");
+            }
+            else
+            {
+                await Application.Current.MainPage.DisplayAlert("Results are here", "Invalid fingerprint", "Ok");
+            }
+        }
+
         async Task ExecuteLoginInCommand()
         {
             ShowLoading(true);
