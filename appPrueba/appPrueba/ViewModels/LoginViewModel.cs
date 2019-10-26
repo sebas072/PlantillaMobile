@@ -14,6 +14,7 @@ namespace appPrueba.ViewModels
     public class LoginViewModel :BaseViewModel
     {
         public Command LoginIn { get; set; }
+        public Command HuellaIn { get; set; }
         public Login User { get; set; }
         public IDataStore<Login> DataStoreLogin => DependencyService.Get<IDataStore<Login>>() ?? new UserDtaStore();
         public LoginViewModel()
@@ -21,85 +22,75 @@ namespace appPrueba.ViewModels
             User = new Login();
             Title = "Iniciar sesión";
             LoginIn = new Command(async () => await ExecuteLoginInCommand());
-            LoadLogin();
+            HuellaIn = new Command(async () => await ExecuteHuellaInCommand());
+            
         }
-
-        private async void LoadLogin()
+        private async Task ExecuteHuellaInCommand()
         {
-            var result = await CrossFingerprint.Current.AuthenticateAsync("Tap that fingerprint sensor!");
+            var result = await CrossFingerprint.Current.AuthenticateAsync("Ingresa tu huella");
             if (result.Authenticated)
             {
-                await Application.Current.MainPage.DisplayAlert("Results are here", "correcto", "Ok");
+                await IniciarSeccion(true);
             }
             else
             {
-                await Application.Current.MainPage.DisplayAlert("Results are here", "Intente de nuevoo", "Ok");
+                await Application.Current.MainPage.DisplayAlert("Error", "Huella no valida", "OK");
             }
         }
 
+       
         async Task ExecuteLoginInCommand()
         {
-            ShowLoading(true);
             if (await ValidateCampos())
             {
-                bool IsSucces;
+                await IniciarSeccion(false);
+            }
+        }
+
+        async Task IniciarSeccion(bool sw)
+        {
+            ShowLoading(true);
+            bool IsSucces;
+            if (!sw)
+            {
+
                 if (netService.IsConected())
                 {
-                    var response = await apiService.APICosumeGet<Login>(generateUrl());
+                    var response = await apiService.APICosumeGetiD<Login>(generateUrl());
                     IsSucces = response.IsSucces;
-                    User.authToken = response.Result != null ? ((Login)response.Result).authToken : String.Empty;
                 }
                 else
                 {
-                    var user = await DataStoreLogin.GetItemAsync(User.email, User.Pass);
-                    User.authToken = user != null ? user.authToken : String.Empty;
+                    var user = await DataStoreLogin.GetItemAsync(User.usuario1, User.pass);
                     IsSucces = user != null;
                 }
-                await repoceLoginIn(IsSucces);
             }
+            else {
+               IsSucces = sw;
+            }
+            await repoceLoginIn(IsSucces);        
             ShowLoading(false);
         }
 
         private async Task<bool> ValidateCampos()
         {
-            if (string.IsNullOrEmpty(User.email) || string.IsNullOrEmpty(User.Pass))
+            if (string.IsNullOrEmpty(User.usuario1) || string.IsNullOrEmpty(User.pass))
             {
                 await Application.Current.MainPage.DisplayAlert("Error", "Campos vacios", "OK");
                 return await Task.FromResult(false);
             }
-            if (!ValidateEmail(User.email))
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", "Formato de correo no valido", "OK");
-                return await Task.FromResult(false);
-            }
             return await Task.FromResult(true);
         }
-        private Boolean ValidateEmail(String email)
-        {
-            String expresion;
-            expresion = "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
-            if (Regex.IsMatch(email, expresion))
-            {
-                if (Regex.Replace(email, expresion, String.Empty).Length == 0)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
-                return false;
-            }
-        }
+      
         async Task repoceLoginIn(bool isSucces)
         {
             if (isSucces)
             {
-                await DataStoreLogin.DeleteItemAsync(User.email);
-                await DataStoreLogin.AddItemAsync(User);
+                if (User.usuario1!= null)
+                {
+                    await DataStoreLogin.DeleteItemAsync(User.usuario1);
+                    await DataStoreLogin.AddItemAsync(User);
+                }
                 App.Current.MainPage = new MainPage();
             }
             else {
@@ -108,7 +99,7 @@ namespace appPrueba.ViewModels
         }
         private string generateUrl()
         {
-            return $"application/login?email={User.email}&password={User.Pass}";
+            return $"/api/Usuarios/{User.usuario1}";
         }
     }
 }

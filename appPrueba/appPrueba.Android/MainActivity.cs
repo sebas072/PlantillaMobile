@@ -10,7 +10,7 @@ using Plugin.Fingerprint;
 
 namespace appPrueba.Droid
 {
-    [Activity(Label = "ElectroQuimbaya", Icon = "@drawable/notifications", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop, AlwaysRetainTaskState = true)]
+    [Activity(Label = "HackDay", Icon = "@drawable/notifications", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, LaunchMode = LaunchMode.SingleTop, AlwaysRetainTaskState = true)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

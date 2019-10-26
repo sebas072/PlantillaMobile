@@ -7,50 +7,59 @@ using appPrueba.Models;
 
 namespace appPrueba.Services
 {
-    public class ClientsDataStore : IDataStore<Client>
+    public class ClientsDataStore : IDataStore<Cliente>
     {
-        private DataAccess dataAccess;   
+        private DataAccess dataAccess;
         public ClientsDataStore()
         {
             dataAccess = new DataAccess();
         }
-        public async Task<bool> AddItemAsync(Client item)
+
+        public async Task<bool> AddItemAsync(Cliente item)
         {
             dataAccess.Insert(item);
             return await Task.FromResult(true);
         }
-        public async Task<bool> UpdateItemAsync(Client item)
-        {
-            dataAccess.Update(item);
-            return await Task.FromResult(true);
-        }
+
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var oldItem = dataAccess.GetList<Client>().FirstOrDefault(s => s.id == id);
+            var oldItem = dataAccess.GetList<Cliente>().FirstOrDefault(s => s.Cedula == id);
             if (oldItem != null)
             {
                 dataAccess.Delete(oldItem);
-            }  
+            }
             return await Task.FromResult(true);
         }
-        public async Task<Client> GetItemAsync(string id,string p = null)
-        {
-            return await Task.FromResult(dataAccess.GetList<Client>().FirstOrDefault(s => s.id == id ));
-        }
 
-        public async Task<ICollection<Client>> GetItemsAsync()
-        {
-            return await Task.FromResult(dataAccess.GetList<Client>());
-        }
-
-        public Task<bool> DeleteItemAsync(int id)
+        public async Task<bool> DeleteItemAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<Client> GetItemAsync(int id)
+        public async Task<Cliente> GetItemAsync(string id, string p = null)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Cliente> GetItemAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Cliente> GetItemAsync(string id)
+        {
+            return await Task.FromResult(dataAccess.GetList<Cliente>().FirstOrDefault(s => s.Cedula == id));
+        }
+
+        public async Task<ICollection<Cliente>> GetItemsAsync()
+        {
+            return await Task.FromResult(dataAccess.GetList<Cliente>());
+        }
+
+        public async Task<bool> UpdateItemAsync(Cliente item)
+        {
+            dataAccess.Update(item);
+            return await Task.FromResult(true);
         }
     }
 }

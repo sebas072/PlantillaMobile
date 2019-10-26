@@ -14,94 +14,42 @@ namespace appPrueba.ViewModels
 {
     public class ClientsViewModel : BaseViewModel
     {
-        public string authToken { get; set; }
-        public IDataStore<Client> DataStore => DependencyService.Get<IDataStore<Client>>() ?? new ClientsDataStore();
-        public ObservableCollection<Client> Items { get; set; }
+        public IDataStore<Cliente> DataStore => DependencyService.Get<IDataStore<Cliente>>() ?? new ClientsDataStore();
+        public ObservableCollection<Cliente> Items { get; set; }
         public Command LoadItemsCommand { get; set; }
-
         public ClientsViewModel()
         {
             Title = "Clientes";
-            Items = new ObservableCollection<Client>();
+            Items = new ObservableCollection<Cliente>();
             LoadClients();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
         }
+
+        private async Task ExecuteLoadItemsCommand()
+        {
+            IDataStore<Cliente> da = DependencyService.Get<IDataStore<Cliente>>() ?? new ClientsDataStore();
+            var user = await da.GetItemsAsync();
+            
+        }
+
         private async void LoadClients()
         {
-            IDataStore<Login> da = DependencyService.Get<IDataStore<Login>>() ?? new UserDtaStore();
-            var user = await da.GetItemsAsync();
-            Login us = new Login();
-            foreach (var u in user)
-                us = u;
-            authToken = us.authToken;
-            await addClients();
-        }
-        private async Task addClients()
-        {
+            Items.Clear();
             if (netService.IsConected())
             {
-                var response = await apiService.APICosumeGet<List<Client>>("sch/prospects.json", authToken);
-                if (response.IsSucces)
+                var itemsGet = await apiService.APICosumeGet<Cliente>("api/Clientes");
+                if (itemsGet.IsSucces)
                 {
-                    foreach (var it in (List<Client>)response.Result)
+                    foreach (var it in (List<Cliente>)itemsGet.Result)
                     {
-                        if (!await isExist(it))
-                        {
-                            await DataStore.AddItemAsync(it);
-                        }
-                    } 
+                      await DataStore.AddItemAsync(it);                     
+                    }
                 }
+             
             }
-            Items.Clear();
-            var itemsGet = await DataStore.GetItemsAsync();
-            foreach (var it in itemsGet)
-                Items.Add(SetIcionStatus(it));
-        }
-
-        private  Client SetIcionStatus(Client c)
-        {
-            switch ((StatusCode)c.statusCd)
-            {
-                case StatusCode.pending:
-                    c.img = "pending.png";
-                    break;
-                case StatusCode.approved:
-                    c.img = "approved.png";
-                    break;
-                case StatusCode.accepted:
-                    c.img = "accepted.png";
-                    break;
-                case StatusCode.rejected:
-                    c.img = "rejected.png";
-                    break;
-                case StatusCode.disabled:
-                    c.img = "disabled.png";
-                    break;
-            }
-            return c;
-        }
-        private async Task<bool> isExist(Client it)
-        {
-            return await Task.FromResult(DataStore.GetItemAsync(it.id) != null);
-        }
-        async Task ExecuteLoadItemsCommand()
-        {
-            if (IsBusy)
-                return;
-
-            IsBusy = true;
-            try
-            {
-                await addClients();
-            }
-            catch (Exception ex)
-            {
-                await Application.Current.MainPage.DisplayAlert("Error", ex.Message, "OK");
-            }
-            finally
-            {
-                IsBusy = false;
-            }
+            var itemsGe = await DataStore.GetItemsAsync();
+            foreach (var it in itemsGe)
+                Items.Add(it);
         }
     }
 }

@@ -12,6 +12,7 @@ namespace appPrueba.Services
         Task<bool> DeleteItemAsync(int id);
         Task<T> GetItemAsync(string id,string p = null);
         Task<T> GetItemAsync(int id);
+        Task<T> GetItemAsync(string id);
         Task<ICollection<T>> GetItemsAsync();
 
 

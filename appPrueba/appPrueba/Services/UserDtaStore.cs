@@ -22,7 +22,7 @@ namespace appPrueba.Services
         }
         public async Task<bool> DeleteItemAsync(string id)
         {
-            var oldItem = dataAccess.GetList<Login>().FirstOrDefault(s=>s.email == id);
+            var oldItem = dataAccess.GetList<Login>().FirstOrDefault(s=>s.usuario1 == id);
             if (oldItem != null)
             {
                 dataAccess.Delete(oldItem);
@@ -37,10 +37,15 @@ namespace appPrueba.Services
 
         public async Task<Login> GetItemAsync(string id, string p = null)
         {
-            return await Task.FromResult(dataAccess.GetList<Login>().FirstOrDefault(s => s.email == id && s.Pass == p));   
+            return await Task.FromResult(dataAccess.GetList<Login>().FirstOrDefault(s => s.usuario1 == id && s.pass == p));   
         }
 
         public Task<Login> GetItemAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Login> GetItemAsync(string id)
         {
             throw new NotImplementedException();
         }

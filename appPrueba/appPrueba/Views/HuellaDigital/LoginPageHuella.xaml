@@ -7,9 +7,41 @@
              x:Class="appPrueba.Views.LoginPageHuella">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Welcome to Xamarin.Forms!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout
+                Spacing="20"
+                Padding="8"
+                VerticalOptions="CenterAndExpand">
+                <Entry
+                    Keyboard="Email"       
+                    Placeholder="Usuario"
+                    Text="{Binding User.usuario1}">
+                </Entry>
+                <Entry           
+                    Placeholder="Contraseña"
+                    IsPassword="True"
+                    Text="{Binding User.pass}">
+                </Entry>
+                <StackLayout Orientation="Horizontal">
+                    <Switch                       
+                        IsToggled="{Binding User.remeber}"    
+                        VerticalOptions="FillAndExpand" 
+                        HorizontalOptions="Start"
+                     />
+                    <Label
+                        Text="Recordarme"
+                        VerticalOptions="CenterAndExpand"/>
+                    <Button   
+                        Command="{Binding LoginIn}"
+                        Text="Ingresar"
+                        HorizontalOptions="EndAndExpand"
+                        VerticalOptions="FillAndExpand"/>
+                    <Button   
+                        Command="{Binding HuellaIn}"
+                        Text="Huella"
+                        HorizontalOptions="EndAndExpand"
+                        VerticalOptions="FillAndExpand"/>
+                </StackLayout>
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

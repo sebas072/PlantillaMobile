@@ -13,7 +13,7 @@ namespace appPrueba.Services
         private string UrlPersonal { get; set; }
         public ApiService()
         {
-            UrlPersonal = "http://apiqu.azurewebsites.net/";
+            UrlPersonal = "http://www.apihackday.somee.com";
         }   
         public async Task<Response> APICosumeGet<T>(string url,string header = null)
         {
